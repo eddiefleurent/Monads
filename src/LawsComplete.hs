@@ -44,20 +44,22 @@ m >>= return = m
 -}
 
 data GovDirectory a = GovDirectory
-  { mayor :: a
-  , interimMayor :: Maybe a
-  , cabinet :: M.Map String a
-  , councilMembers :: [a]
-  } deriving (Show, Eq)
+  { mayor :: a,
+    interimMayor :: Maybe a,
+    cabinet :: M.Map String a,
+    councilMembers :: [a]
+  }
+  deriving (Show, Eq)
 
 -- An invalid functor instance!
 instance Functor GovDirectory where
-  fmap f oldDirectory = GovDirectory {
-    mayor = f (mayor oldDirectory),
-    interimMayor = Nothing, -- This isn't right!
-    cabinet = f <$> cabinet oldDirectory,
-    councilMembers = f <$> councilMembers oldDirectory
-  }
+  fmap f oldDirectory =
+    GovDirectory
+      { mayor = f (mayor oldDirectory),
+        interimMayor = Nothing, -- This isn't right!
+        cabinet = f <$> cabinet oldDirectory,
+        councilMembers = f <$> councilMembers oldDirectory
+      }
 
 instance Arbitrary a => Arbitrary (GovDirectory a) where
   arbitrary = do
@@ -65,12 +67,13 @@ instance Arbitrary a => Arbitrary (GovDirectory a) where
     im <- arbitrary
     cab <- arbitrary
     cm <- arbitrary
-    return $ GovDirectory
-      { mayor = m
-      , interimMayor = im
-      , cabinet = cab
-      , councilMembers = cm
-      }
+    return $
+      GovDirectory
+        { mayor = m,
+          interimMayor = im,
+          cabinet = cab,
+          councilMembers = cm
+        }
 
 -- TODO: Fix the functor instance and run again!
 main :: IO ()

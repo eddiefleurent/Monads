@@ -24,14 +24,16 @@ maybeFunc1 "" = Nothing
 maybeFunc1 str = Just $ length str
 
 maybeFunc2 :: Int -> Maybe Float
-maybeFunc2 i = if i `mod` 2 == 0
-  then Nothing
-  else Just ((fromIntegral i) * 3.14159)
+maybeFunc2 i =
+  if i `mod` 2 == 0
+    then Nothing
+    else Just ((fromIntegral i) * 3.14159)
 
 maybeFunc3 :: Float -> Maybe [Int]
-maybeFunc3 f = if f > 15.0
-  then Nothing
-  else Just [floor f, ceiling f]
+maybeFunc3 f =
+  if f > 15.0
+    then Nothing
+    else Just [floor f, ceiling f]
 
 runMaybeFuncs :: String -> Maybe [Int]
 runMaybeFuncs input = case maybeFunc1 input of
@@ -61,9 +63,10 @@ runMaybeFuncsDo2 input = do
 
 -- Not so nice
 runMaybeFuncsBind2 :: String -> Maybe [Int]
-runMaybeFuncsBind2 input = maybeFunc1 input
-  >>= (\i -> maybeFunc2 (i + 2))
-  >>= maybeFunc3
+runMaybeFuncsBind2 input =
+  maybeFunc1 input
+    >>= (\i -> maybeFunc2 (i + 2))
+    >>= maybeFunc3
 
 -- Using the Either monad
 eitherFunc1 :: String -> Either String Int
@@ -71,14 +74,16 @@ eitherFunc1 "" = Left "String cannot be empty!"
 eitherFunc1 str = Right $ length str
 
 eitherFunc2 :: Int -> Either String Float
-eitherFunc2 i = if i `mod` 2 == 0
-  then Left "Length cannot be even!"
-  else Right ((fromIntegral i) * 3.14159)
+eitherFunc2 i =
+  if i `mod` 2 == 0
+    then Left "Length cannot be even!"
+    else Right ((fromIntegral i) * 3.14159)
 
 eitherFunc3 :: Float -> Either String [Int]
-eitherFunc3 f = if f > 15.0
-  then Left "Float is too large!"
-  else Right [floor f, ceiling f]
+eitherFunc3 f =
+  if f > 15.0
+    then Left "Float is too large!"
+    else Right [floor f, ceiling f]
 
 runEitherFuncs :: String -> Either String [Int]
 runEitherFuncs input = do

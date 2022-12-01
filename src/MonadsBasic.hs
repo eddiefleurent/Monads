@@ -24,14 +24,16 @@ maybeFunc1 "" = Nothing
 maybeFunc1 str = Just $ length str
 
 maybeFunc2 :: Int -> Maybe Float
-maybeFunc2 i = if i `mod` 2 == 0
-  then Nothing
-  else Just ((fromIntegral i) * 3.14159)
+maybeFunc2 i =
+  if i `mod` 2 == 0
+    then Nothing
+    else Just ((fromIntegral i) * 3.14159)
 
 maybeFunc3 :: Float -> Maybe [Int]
-maybeFunc3 f = if f > 15.0
-  then Nothing
-  else Just [floor f, ceiling f]
+maybeFunc3 f =
+  if f > 15.0
+    then Nothing
+    else Just [floor f, ceiling f]
 
 -- Evaluating each input leads to the "triangle" anti-pattern
 runMaybeFuncs :: String -> Maybe [Int]
@@ -40,10 +42,11 @@ runMaybeFuncs input = case maybeFunc1 input of
   Just i -> case maybeFunc2 i of
     Nothing -> Nothing
     Just f -> maybeFunc3 f
-    -- Imagine it keeps going...
-    -- case maybeFunc3 of
-    --   Nothing -> ...
-    --   Just y -> ...
+
+-- Imagine it keeps going...
+-- case maybeFunc3 of
+--   Nothing -> ...
+--   Just y -> ...
 
 -- TODO: Write the above function in one line using the >>= operator!
 runMaybeFuncsBind :: String -> Maybe [Int]
@@ -67,14 +70,16 @@ eitherFunc1 "" = Left "String cannot be empty!"
 eitherFunc1 str = Right $ length str
 
 eitherFunc2 :: Int -> Either String Float
-eitherFunc2 i = if i `mod` 2 == 0
-  then Left "Length cannot be even!"
-  else Right ((fromIntegral i) * 3.14159)
+eitherFunc2 i =
+  if i `mod` 2 == 0
+    then Left "Length cannot be even!"
+    else Right ((fromIntegral i) * 3.14159)
 
 eitherFunc3 :: Float -> Either String [Int]
-eitherFunc3 f = if f > 15.0
-  then Left "Float is too large!"
-  else Right [floor f, ceiling f]
+eitherFunc3 f =
+  if f > 15.0
+    then Left "Float is too large!"
+    else Right [floor f, ceiling f]
 
 -- TODO: Call the 3 functions above!
 --       Use do-notation or (>>=)

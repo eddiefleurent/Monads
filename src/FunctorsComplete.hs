@@ -1,24 +1,25 @@
 module FunctorsComplete where
 
-import           Data.Maybe (mapMaybe)
-import qualified Data.Map   as M
+import qualified Data.Map as M
+import Data.Maybe (mapMaybe)
 
 -- Motivating Examples!
 
 -- Simple String conversion. It might fail, so it returns Maybe
 tupleFromInputString :: String -> Maybe (String, String, Int)
-tupleFromInputString input = if length stringComponents /= 3
-  then Nothing
-  else Just (stringComponents !! 0, stringComponents !! 1, age)
+tupleFromInputString input =
+  if length stringComponents /= 3
+    then Nothing
+    else Just (stringComponents !! 0, stringComponents !! 1, age)
   where
     stringComponents = words input
     age = read (stringComponents !! 2) :: Int
 
 -- An alternative to using a tuple (String, String, Int)
 data Person = Person
-  { firstName :: String
-  , lastName :: String
-  , age :: Int
+  { firstName :: String,
+    lastName :: String,
+    age :: Int
   }
 
 personFromTuple :: (String, String, Int) -> Person
@@ -57,35 +58,38 @@ convertTupleFunctor = fmap personFromTuple
 
 -- Making our own Functor
 
-data GovDirectory a = GovDirectory {
-  mayor :: a,
-  interimMayor :: Maybe a,
-  cabinet :: M.Map String a,
-  councilMembers :: [a]
-}
-
-instance Functor GovDirectory where
-  fmap f oldDirectory = GovDirectory {
-    mayor = f (mayor oldDirectory),
-    interimMayor = fmap f (interimMayor oldDirectory),
-    cabinet = fmap f (cabinet oldDirectory),
-    councilMembers = fmap f (councilMembers oldDirectory)
-    -- Could also use <$> as an operator for `fmap`
-    -- interimMayor = f <$> interimMayor oldDirectory,
-    -- cabinet = f <$> cabinet oldDirectory,
-    -- councilMembers = f <$> councilMembers oldDirectory
+data GovDirectory a = GovDirectory
+  { mayor :: a,
+    interimMayor :: Maybe a,
+    cabinet :: M.Map String a,
+    councilMembers :: [a]
   }
 
+instance Functor GovDirectory where
+  fmap f oldDirectory =
+    GovDirectory
+      { mayor = f (mayor oldDirectory),
+        interimMayor = fmap f (interimMayor oldDirectory),
+        cabinet = fmap f (cabinet oldDirectory),
+        councilMembers = fmap f (councilMembers oldDirectory)
+        -- Could also use <$> as an operator for `fmap`
+        -- interimMayor = f <$> interimMayor oldDirectory,
+        -- cabinet = f <$> cabinet oldDirectory,
+        -- councilMembers = f <$> councilMembers oldDirectory
+      }
+
 oldDirectory :: GovDirectory (String, String, Int)
-oldDirectory = GovDirectory
-  ("John", "Doe", 46)
-  Nothing
-  (M.fromList 
-    [ ("Treasurer", ("Timothy", "Houston", 51))
-    , ("Historian", ("Bill", "Jefferson", 42))
-    , ("Sheriff", ("Susan", "Harrison", 49))
-    ])
-  ([("Sharon", "Stevens", 38), ("Christine", "Washington", 47)])
+oldDirectory =
+  GovDirectory
+    ("John", "Doe", 46)
+    Nothing
+    ( M.fromList
+        [ ("Treasurer", ("Timothy", "Houston", 51)),
+          ("Historian", ("Bill", "Jefferson", 42)),
+          ("Sheriff", ("Susan", "Harrison", 49))
+        ]
+    )
+    ([("Sharon", "Stevens", 38), ("Christine", "Washington", 47)])
 
 newDirectory :: GovDirectory Person
 newDirectory = personFromTuple <$> oldDirectory

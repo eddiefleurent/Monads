@@ -2,9 +2,9 @@ module TransformersComplete where
 
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Class (lift)
-import Control.Monad.Trans.Reader
 import Control.Monad.Trans.Maybe
-import Data.Char (isUpper, isLower)
+import Control.Monad.Trans.Reader
+import Data.Char (isLower, isUpper)
 
 main1 :: IO ()
 main1 = do

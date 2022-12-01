@@ -1,9 +1,9 @@
 module State where
 
-import           Control.Monad.State
+import Control.Monad.State
 import qualified Data.Array as A
 import qualified Data.Ix as I
-import           System.Random (StdGen, randomR, newStdGen)
+import System.Random (StdGen, newStdGen, randomR)
 
 {- State Monad reference
 
@@ -21,19 +21,20 @@ data TileState = Empty | HasX | HasO
 type TileIndex = (Int, Int)
 
 boardIndices :: [TileIndex]
-boardIndices = I.range ((0, 0), (2,2))
+boardIndices = I.range ((0, 0), (2, 2))
 
 data GameState = GameState
-  { board :: A.Array TileIndex TileState
-  , currentPlayer :: Player
-  , generator :: StdGen
+  { board :: A.Array TileIndex TileState,
+    currentPlayer :: Player,
+    generator :: StdGen
   }
 
 initialGameState :: StdGen -> GameState
-initialGameState gen = GameState
-  (A.array (head boardIndices, last boardIndices) [(i, Empty) | i <- boardIndices])
-  XPlayer
-  gen
+initialGameState gen =
+  GameState
+    (A.array (head boardIndices, last boardIndices) [(i, Empty) | i <- boardIndices])
+    XPlayer
+    gen
 
 nextPlayer :: Player -> Player
 nextPlayer XPlayer = OPlayer
